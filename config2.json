@@ -1,6 +1,32 @@
-{
-  "loginIp": "192.168.200.100",
-  "loginPort": 9000,
-  "registerIp": "192.168.200.100",
-  "registerPort": 9000
-}
+export default {
+  async fetch(request) {
+    // NetworkCore.dll의 CONFIG_AUTH_KEY_ENC를 복호화했을 때와 반드시 동일해야 함.
+    // encode_secret.py로 새로 뽑았으면 여기도 같이 바꾸세요.
+    const SECRET_KEY = "k9fjdh!@jdfhdk";
+
+    const providedKey = request.headers.get("X-Nexus-Key");
+    if (providedKey !== SECRET_KEY) {
+      return new Response("Forbidden", { status: 403 });
+    }
+
+    // GET 요청만 허용
+    if (request.method !== "GET") {
+      return new Response("Method Not Allowed", { status: 405 });
+    }
+
+    const CONFIG = {
+      loginIp: "192.168.200.101",
+      loginPort: 9000,
+      registerIp: "192.168.200.102",
+      registerPort: 9000
+    };
+
+    return new Response(JSON.stringify(CONFIG), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-store" // 캐시 안 타게 해서 수정 즉시 반영되게 함
+      }
+    });
+  }
+};

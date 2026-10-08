@@ -1,0 +1,6 @@
+{
+  "loginIp": "192.168.200.100",
+  "loginPort": 9000,
+  "registerIp": "192.168.200.100",
+  "registerPort": 9000
+}
